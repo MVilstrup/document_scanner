@@ -13,7 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "hashicorp/precise64"
 
   # Shell script provisioning
-  config.vm.provision "shell", path: "set_up_vision_environment.sh"
+  config.vm.provision "shell", path: "setup_vision_environment.sh"
+   config.vm.provision "shell", path: "setup_tesseract.sh"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
