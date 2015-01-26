@@ -45,18 +45,17 @@ def scan_reciept(image):
     # show the contour (outline) of the piece of paper
     if screen_contour is None:
         print "No contours could be found"
-        exit()
+        return
 
     # apply the four point transform to obtain a top-down
     # view of the original image
-    print screen_contour.flatten()
     warped = four_point_transform(original, screen_contour.reshape(4, 2) * ratio)
 
     # Convert the warped image to greyscale, then threshold it
     # to give it that "black and white" paper effect
-    warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-    warped = threshold_adaptive(warped, 210, offset= 13)
-    warped = warped.astype("uint8") * 255
+    #warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
+    #warped = threshold_adaptive(warped, 210, offset= 13)
+    #warped = warped.astype("uint8") * 255
 
     return warped
 

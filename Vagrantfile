@@ -10,11 +10,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "Hashicorp/precise64"
 
   # Shell script provisioning
   config.vm.provision "shell", path: "setup_vision_environment.sh"
-   config.vm.provision "shell", path: "setup_tesseract.sh"
+  config.vm.provision "shell", path: "setup_tesseract.sh"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -27,15 +27,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.cpus = 2
   end
 
-  # Enable GUI programs 
-  config.ssh.forward_x11 = true
-
   # View the documentation for the provider you're using for more
   # information on available options.
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
-  # config.ssh.forward_agent = true
+  config.ssh.forward_agent = true
+
+  # Enable GUI programs
+  config.ssh.forward_x11 = true
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
