@@ -1,12 +1,13 @@
 import numpy as np
 import cv2
 
+
 def order_points(points):
     # initialize a list of coordinates that will be ordered
     # such that the first entry in the list is the top-left,
     # the second entry is the top-right, the third is the
     # bottom-right, and the fourth is the bottom-left
-    rectangle = np.zeros((4, 2), dtype = "float32")
+    rectangle = np.zeros((4, 2), dtype="float32")
 
     # the top-left point will have the smallest sum, whereas
     # the bottom-right point will have the largest sum
@@ -23,6 +24,7 @@ def order_points(points):
 
     # return the ordered points
     return rectangle
+
 
 def four_point_transform(image, points):
     # Obtain a consistent order of the points and unpack them
@@ -49,10 +51,10 @@ def four_point_transform(image, points):
     # (i. e top-down view) of the image, again specifying points
     # in the top-left, top-right, bottom-right, bottom-left order
     destination = np.array([
-        [0, 0],
-        [max_width - 1, 0],
-        [max_width - 1, max_height - 1],
-        [0, max_height - 1]], dtype= "float32")
+                               [0, 0],
+                               [max_width - 1, 0],
+                               [max_width - 1, max_height - 1],
+                               [0, max_height - 1]], dtype="float32")
 
     # Compute the perspective transform matrix and the apply it to the image
     matrix = cv2.getPerspectiveTransform(rectangle, destination)

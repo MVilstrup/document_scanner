@@ -1,18 +1,16 @@
+import argparse
+
+from skimage.filter import threshold_adaptive
+import cv2
+
 from transform import four_point_transform
 from utils import imutils
-from skimage.filter import threshold_adaptive
+from hughes import compute_skew
 
-import argparse
-import cv2
 
 def scan_reciept(image):
     # Load the image and compute the ratio of the old height to
     # the new height, clone the image and resize it
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Path to the image")
-    args = vars(ap.parse_args())
-
-    image = cv2.imread(args["image"])
     ratio = image.shape[0] / 700.0
     original = image.copy()
 
@@ -27,7 +25,7 @@ def scan_reciept(image):
     # Find the contours in the edged image, keeping only the
     # largest ones, and initialize the screen contour
     (contours, _) = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    contours = sorted(contours, key=cv2.contourArea, reverse= True)[:5]
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)[:5]
 
     # loop over the contours
     screen_contour = None
@@ -53,11 +51,14 @@ def scan_reciept(image):
 
     # Convert the warped image to greyscale, then threshold it
     # to give it that "black and white" paper effect
-    #warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-    #warped = threshold_adaptive(warped, 210, offset= 13)
-    #warped = warped.astype("uint8") * 255
 
-    return warped
+
+    warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
+    warped = threshold_adaptive(warped, 210, offset=13)
+    warped = warped.astype("uint8") * 255
+    rotated = compute_skew(warped)
+
+    return rotated
 
 
 

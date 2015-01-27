@@ -11,3 +11,7 @@ rm python-tesseract_0.7-1.4_amd64.deb
 rm python-tesseract_0.7-1.4_i386.deb
 
 sudo cp /vagrant/tessdata/* /usr/share/tesseract-ocr/tessdata/
+
+sudo apt-get install libicu-dev -y
+sudo apt-get install libpango1.0-dev -y
+sudo apt-get install libcairo2-dev -y

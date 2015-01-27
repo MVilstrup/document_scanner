@@ -21,6 +21,10 @@ def rotate(image, angle, center=None, scale=1.0):
 
 
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
+    """
+
+    :rtype : object
+    """
     dimension = None
     (h, w) = image.shape[:2]
 
