@@ -12,10 +12,10 @@ class ImageScanner:
     def __init__(self):
         pass
 
-    def deskew(self, image, width):
+    def deskew(self, image):
 
         (h, w) = image.shape[:2]
-        moments = cv2.moments(image)
+        moments = cv2.moments(image, binaryImage=1)
 
         skew = moments["mu11"] / moments["mu02"]
 
@@ -25,7 +25,9 @@ class ImageScanner:
 
         image = cv2.warpAffine(image, matrix, (w, h), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
 
-        image = imutils.resize(image, width=width)
+        (height, width) = image.shape[:2]
+        image = image[20:height - 20, 30:width - 30]
+        image= cv2.copyMakeBorder(image,10,10,200,200,cv2.BORDER_REPLICATE)
 
         return image
 
@@ -41,7 +43,7 @@ class ImageScanner:
         # in the image
         grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         grey = cv2.GaussianBlur(grey, (5, 5), 0)
-        edged = cv2.Canny(grey, 30, 200)
+        edged = cv2.Canny(grey, 30, 220)
 
         # Find the contours in the edged image, keeping only the
         # largest ones, and initialize the screen contour
@@ -76,11 +78,11 @@ class ImageScanner:
 
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
         width = warped.shape[1]
-        warped = threshold_adaptive(warped, 210, offset=13)
+        warped = threshold_adaptive(warped, 195, offset=17)
 
         warped = warped.astype("uint8") * 255
-        rotated = compute_skew(warped)
-
+        #rotated = compute_skew(warped)
+        rotated = self.deskew(warped)
         return rotated
 
 

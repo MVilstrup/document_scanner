@@ -17,7 +17,7 @@ scanner = ImageScanner()
 warped = scanner.scan_reciept(image)
 
 cv2.imshow("Original", imutils.resize(image, height=650))
-cv2.imshow("Lines", imutils.resize(warped, height=650))
+cv2.imshow("Warped", imutils.resize(warped, height=650))
 
 cv2.imwrite("../images/scanned.png", warped)
 
