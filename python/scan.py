@@ -26,8 +26,8 @@ class ImageScanner:
         image = cv2.warpAffine(image, matrix, (w, h), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
 
         (height, width) = image.shape[:2]
-        image = image[20:height - 20, 30:width - 30]
-        image= cv2.copyMakeBorder(image,10,10,200,200,cv2.BORDER_REPLICATE)
+        image = image[20:height - 10, 30:width - 30]
+        image= cv2.copyMakeBorder(image,200,200,200,200,cv2.BORDER_CONSTANT,value=(255, 255, 255))
 
         return image
 
