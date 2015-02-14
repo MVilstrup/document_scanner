@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 from transform import four_point_transform
 from utils import imutils
+from utils.ImageConverter import ImageConverter
 from hughes import compute_skew
 
 class ImageScanner:
@@ -26,16 +27,22 @@ class ImageScanner:
         image = cv2.warpAffine(image, matrix, (w, h), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
 
         (height, width) = image.shape[:2]
-        image = image[20:height - 10, 30:width - 30]
+        image = image[20:height - 10, 60:width - 80]
         image= cv2.copyMakeBorder(image,200,200,200,200,cv2.BORDER_CONSTANT,value=(255, 255, 255))
 
         return image
 
+    # Function used to scan images, and extract the receipts from them
+    # If the scan is successful it returns true, and the scanned image
+    # Otherwise it returns false and the original image
     def scan_reciept(self, image):
         # Load the image and compute the ratio of the old height to
         # the new height, clone the image and resize it
         ratio = image.shape[0] / 700.0
         original = image.copy()
+
+        # initiate value to judge if the image could be scanned or not
+        scanned = False
 
         image = imutils.resize(image, height=700)
 
@@ -66,7 +73,7 @@ class ImageScanner:
         # show the contour (outline) of the piece of paper
         if screen_contour is None:
             print "No contours could be found"
-            return
+            return (scanned, image)
 
         # apply the four point transform to obtain a top-down
         # view of the original image
@@ -77,13 +84,16 @@ class ImageScanner:
 
 
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-        width = warped.shape[1]
-        warped = threshold_adaptive(warped, 195, offset=17)
 
+        warped = threshold_adaptive(warped, 210, offset=19)
         warped = warped.astype("uint8") * 255
         #rotated = compute_skew(warped)
         rotated = self.deskew(warped)
-        return rotated
+        #rotated  = ImageConverter.deskew(warped)
+
+        scanned = True
+
+        return (scanned, rotated)
 
 
 

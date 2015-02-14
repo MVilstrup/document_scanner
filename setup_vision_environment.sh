@@ -30,11 +30,7 @@ sudo sh -c 'echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig \n e
 
 echo "OpenCV" $version "ready to be used"
 
-# Install the final libraries for working with images in python 
+# Install the final libraries for working with images in python
 sudo apt-get install python-pip python-scipy -y
 sudo easy_install -U distribute
 sudo pip install six mahotas matplotlib scikit-learn scikit-image
-
-# Make sure you can open images and videos on your local computer
-
-

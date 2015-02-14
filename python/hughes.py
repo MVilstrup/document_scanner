@@ -34,7 +34,7 @@ def compute_skew(image):
         cv2.drawContours(image, contour, -1, (0, 0, 0), -1)
 
     edges = cv2.Canny(image, 80, 120)
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 2, None, 150, 40);
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 2, None, 150, 40)
     degrees = 0
     calculated_lines = 0
     for line in lines[0]:
