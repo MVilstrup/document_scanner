@@ -31,4 +31,4 @@ for (dirpath, _, filenames) in walk(old_path):
 
 # Convert the images to tiff images before starting working on them
 for image in images:
-    image_path = ImageConverter.convert_format_and_dpi(image, file_format="tiff", new_path=new_path, dpi=300)
+    image_path = ImageConverter.convert_format(image, file_format="tiff", new_path=new_path)

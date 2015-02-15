@@ -72,7 +72,6 @@ class ImageScanner:
 
         # show the contour (outline) of the piece of paper
         if screen_contour is None:
-            print "No contours could be found"
             return (scanned, image)
 
         # apply the four point transform to obtain a top-down

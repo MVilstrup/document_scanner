@@ -12,7 +12,7 @@ class ImageConverter:
 
     # Method used to convert the DPI of an Image, to ensure the best reading resolution
     @staticmethod
-    def convert_format_and_dpi(image_path, file_format="tiff", new_path=None, dpi=300):
+    def convert_format(image_path, file_format="tiff", new_path=None):
 
         # Extract the relevant information about the image
         image_folder = os.path.dirname(image_path)
@@ -26,19 +26,16 @@ class ImageConverter:
             new_path = "%s%s.%s" % (new_path, image_name, file_format)
 
         im = Image.open(image_path)
-
-        # Check if it is possible to extract the resolution of the image
-        if "dpi" in im.info.keys():
-            if im.info['dpi'] != (300, 300) or file_extension != file_format:
-                im.save(new_path, dpi=(dpi, dpi))
-            else:
-                print "%s.%s is already 300 DPI" % (image_name, file_format)
-        # If it is not possible to extract the resolution, save the image no matter what
-        else:
-            print "Resolution could not be found"
-            im.save(new_path, dpi=(dpi, dpi))
+        im.save(new_path)
 
         return new_path
+
+    @staticmethod
+    def convert_dpi(image_path, dpi=300):
+        im = Image.open(image_path)
+        im.save(image_path, dpi=(dpi, dpi))
+
+
 
     @staticmethod
     def deskew(image):
