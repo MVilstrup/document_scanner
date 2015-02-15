@@ -23,8 +23,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # vb.gui = true
 
       # Use VBoxManage to customize the VM. For example to change memory:
-      vb.memory = 2048
-      vb.cpus = 2
+      vb.memory = 3048
+      vb.cpus = 3
   end
 
   # View the documentation for the provider you're using for more
