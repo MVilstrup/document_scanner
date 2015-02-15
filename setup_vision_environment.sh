@@ -31,6 +31,13 @@ sudo sh -c 'echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig \n e
 echo "OpenCV" $version "ready to be used"
 
 # Install the final libraries for working with images in python
-sudo apt-get install python-pip python-scipy -y
+sudo apt-get install python-pip python-scipy rabbitmq-server -y
 sudo easy_install -U distribute
-sudo pip install six mahotas matplotlib scikit-learn scikit-image
+sudo pip install six mahotas matplotlib scikit-learn scikit-image celery
+
+
+# Setting up RabbitMQ to enable distributed tasks in the code
+sudo rabbitmqctl add_user myuser mypassword
+sudo rabbitmqctl add_vhost myvhost
+sudo rabbitmqctl set_permissions -p myvhost myuser ".*" ".*" ".*"
+sudo rabbitmq-server
