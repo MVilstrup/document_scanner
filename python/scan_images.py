@@ -1,14 +1,16 @@
 import argparse
 import os
 import multiprocessing as mp
+
 import cv2
 
-from utils import imutils
 from utils.ImageConverter import ImageConverter
 from scan import ImageScanner
 
 
 images_not_scanned = {}
+
+
 def scan_image(image_name, image_path):
     image = cv2.imread(image_path)
     scanner = ImageScanner()
@@ -27,14 +29,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--directory", required=True, help="Path to the directory containing the images")
 args = vars(ap.parse_args())
 
-
-
 images = {}
 
 for (dirpath, _, filenames) in os.walk(args["directory"]):
 
     for file in filenames:
-        _ , extension =  os.path.splitext(file)
+        _, extension = os.path.splitext(file)
         if extension in [".tiff", ".TIFF"]:
             name = file
             path = "%s%s" % (dirpath, file)

@@ -1,37 +1,34 @@
-import argparse
-
 from skimage.filter import threshold_adaptive
 import cv2
 import numpy as np
+
 from transform import four_point_transform
 from utils import imutils
-from utils.ImageConverter import ImageConverter
-from hughes import compute_skew
+
 
 class ImageScanner:
-
     def __init__(self):
         pass
 
     def deskew(self, image):
 
-        image = cv2.copyMakeBorder(image,200,200,200,200,cv2.BORDER_CONSTANT,value=(255, 255, 255))
+        image = cv2.copyMakeBorder(image, 200, 200, 200, 200, cv2.BORDER_CONSTANT, value=(255, 255, 255))
         (h, w) = image.shape[:2]
         moments = cv2.moments(image, binaryImage=1)
 
         skew = moments["mu11"] / moments["mu02"]
 
         matrix = np.float32([
-                [1, skew, -0.5 * w * skew],
-                [0, 1, 0]])
+            [1, skew, -0.5 * w * skew],
+            [0, 1, 0]])
 
         image = cv2.warpAffine(image, matrix, (w, h), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
 
         (height, width) = image.shape[:2]
         image = image[210:height - 210, 210:width - 210]
 
-
         return image
+
 
     # Function used to scan images, and extract the receipts from them
     # If the scan is successful it returns true, and the scanned image
@@ -85,14 +82,14 @@ class ImageScanner:
         # Convert the warped image to greyscale, then threshold it
         # to give it that "black and white" paper effect
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-        warped = cv2.fastNlMeansDenoising(warped,None,15,11,21)
+        warped = cv2.fastNlMeansDenoising(warped, None, 15, 11, 21)
         warped = cv2.GaussianBlur(warped, (3, 3), 0)
 
         warped = threshold_adaptive(warped, 240, offset=17)
         warped = warped.astype("uint8") * 255
 
 
-        #warped = cv2.erode(warped, None, iterations=1)
+        # warped = cv2.erode(warped, None, iterations=1)
 
         #rotated = compute_skew(warped)
         rotated = self.deskew(warped)

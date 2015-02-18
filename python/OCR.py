@@ -1,6 +1,7 @@
 import cv2.cv as cv
 import tesseract
 
+
 def read_receipt(image_path):
     api = tesseract.TessBaseAPI()
     api.Init(".", "dan", tesseract.OEM_DEFAULT)
