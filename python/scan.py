@@ -15,6 +15,7 @@ class ImageScanner:
 
     def deskew(self, image):
 
+        image = cv2.copyMakeBorder(image,200,200,200,200,cv2.BORDER_CONSTANT,value=(255, 255, 255))
         (h, w) = image.shape[:2]
         moments = cv2.moments(image, binaryImage=1)
 
@@ -27,8 +28,8 @@ class ImageScanner:
         image = cv2.warpAffine(image, matrix, (w, h), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
 
         (height, width) = image.shape[:2]
-        image = image[20:height - 10, 60:width - 80]
-        image= cv2.copyMakeBorder(image,200,200,200,200,cv2.BORDER_CONSTANT,value=(255, 255, 255))
+        image = image[210:height - 210, 210:width - 210]
+
 
         return image
 
@@ -50,7 +51,10 @@ class ImageScanner:
         # in the image
         grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         grey = cv2.GaussianBlur(grey, (5, 5), 0)
-        edged = cv2.Canny(grey, 30, 220)
+
+        high_tresh = 240
+        low_tresh = high_tresh / 3
+        edged = cv2.Canny(grey, low_tresh, high_tresh)
 
         # Find the contours in the edged image, keeping only the
         # largest ones, and initialize the screen contour
@@ -80,12 +84,16 @@ class ImageScanner:
 
         # Convert the warped image to greyscale, then threshold it
         # to give it that "black and white" paper effect
-
-
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
+        warped = cv2.fastNlMeansDenoising(warped,None,15,11,21)
+        warped = cv2.GaussianBlur(warped, (3, 3), 0)
 
-        warped = threshold_adaptive(warped, 210, offset=19)
+        warped = threshold_adaptive(warped, 240, offset=17)
         warped = warped.astype("uint8") * 255
+
+
+        #warped = cv2.erode(warped, None, iterations=1)
+
         #rotated = compute_skew(warped)
         rotated = self.deskew(warped)
         #rotated  = ImageConverter.deskew(warped)
