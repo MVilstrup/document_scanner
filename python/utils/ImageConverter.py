@@ -55,3 +55,19 @@ class ImageConverter:
         # cv2.imshow("Linned", imutils.resize(lined_image, height=650))
         #cv2.waitKey(0)
         return lined_image
+
+    def find_corners(image, image_path):
+
+        image_folder = os.path.dirname(image_path)
+        image_name, file_extension = os.path.splitext(os.path.basename(image_path))
+        new_path = "%s/%s-corner.jpg" % (image_folder, image_name)
+
+        corners = cv2.goodFeaturesToTrack(image, 25, 0.01, 10)
+        corners = np.int0(corners)
+        coloured = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+
+        for i in corners:
+            x, y = i.ravel()
+            cv2.circle(coloured, (x, y), 10, (0, 0, 255), -1)
+
+        cv2.imwrite(new_path, coloured)

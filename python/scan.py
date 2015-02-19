@@ -17,7 +17,7 @@ class ImageScanner:
         moments = cv2.moments(image, binaryImage=1)
 
         skew = moments["mu11"] / moments["mu02"]
-
+        print "skew = %i" % skew
         matrix = np.float32([
             [1, skew, -0.5 * w * skew],
             [0, 1, 0]])

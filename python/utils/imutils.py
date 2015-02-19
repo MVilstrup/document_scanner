@@ -15,7 +15,7 @@ def rotate(image, angle, center=None, scale=1.0):
         center = (width / 2, height / 2)
 
     matrix = cv2.getRotationMatrix2D(center, angle, scale)
-    rotated = cv2.warpAffine(image, matrix, (width, height))
+    rotated = cv2.warpAffine(image, matrix, (width, height), borderValue=(255, 255, 255))
 
     return rotated
 
@@ -26,6 +26,7 @@ def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     :rtype : object
     """
     dimension = None
+
     (h, w) = image.shape[:2]
 
     if width is None and height is None:
